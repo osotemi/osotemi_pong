@@ -4,17 +4,24 @@
  *
  */
 //(function () {
-    var paquita = require('./artifact');
+    var artifact = require('./artifact');
     var utils = require('./utils');
+    var stick = require('./stick');
     var vpWidth=window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     var vpHeight=window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
 
            window.onload=function(){
-                var artifact_=new paquita("bola");
+                var artifact_=new artifact("bola");
+                var stick_=new stick("racket");
+
                 artifact_.vpWidth=vpWidth;
                 artifact_.vpHeight=vpHeight;
                 artifact_.locate((vpWidth/2)-artifact_.imgObj.width,(vpHeight/2)-artifact_.imgObj.height);  //Posicionem pilota al mig
+
+                stick_.vpWidth=vpWidth;
+                stick_.vpHeight=vpHeight;
+                stick_.locate(vpHeight/2);
 
                 var controlFunction=function(event){
                     event.preventDefault();
@@ -33,14 +40,6 @@
                                 }
                                 break;
                             case "click":
-                                if (artifact_.state !== "runvertical"){
-                                    artifact_.state="runvertical";
-                                    artifact_.setDirection("NORTH");
-                                    //artifact_.dirX=0;
-                                    //artifact_.dirY=-2;
-                                }
-                                break;
-                            default:
                                 if (artifact_.state !== "runhorizontal"){
                                     artifact_.state="runhorizontal";
                                     artifact_.setDirection("WEST");
@@ -48,6 +47,19 @@
                                     //artifact_.dirY=-0;
                                 }
                                 break;
+
+                            default:
+                                stick_.movement( event.keyCode );
+                                break;
+                                /*
+                                if (artifact_.state !== "runvertical"){
+                                    artifact_.state="runvertical";
+                                    artifact_.setDirection("NORTH");
+                                    //artifact_.dirX=0;
+                                    //artifact_.dirY=-2;
+                                }
+                                break;
+                                */
                         }
                         artifact_.start();
                     }
