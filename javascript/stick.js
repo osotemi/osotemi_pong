@@ -1,29 +1,33 @@
-/**
- prototype we move up-down an image on screen
-* @author osotemi
-*
-* @constructor
-* @this {Stick}
-*
-*/
-var Stick = function(id_racket){
-  this.img_element = document.getElementById(id_racket);
-  this.mobility = 40;
-}
+/*
+ * Crea una instància de Stick.
+ * Amb aquest objecte creem la barra que el jugador té que controlar per fer rebotar la bola al sobre i no perdre vides
+ *
+ * @constructor
+ * @this {Stick}
+ * @param {id_stick} ,side {left or right}
+ *
+ */
+function Stick(id_stick,side,context) {
 
-//Meneja la raqueta
-Stick.prototype.movement= function( keycode ){
-  if( keycode == 38 ){ this.locate(parseInt(this.img_element.style.top) + this.mobility); }
-  else if (keycode == 40){ this.locate(parseInt(this.img_element.style.top) - this.mobility); };
+  this.imgObj = document.getElementById(id_stick);
+  this.side= side || "left" ; //right,left,
+  this.gap=25;    //From this.position in pixels
+  this.context = context;
+  var self = this;
 
-}; //End move method
-
-//Posicionem Raqueta de manera absoluta en Y i comprovem llímits
-Stick.prototype.locate = function(y){
-  //No ens eixim per dalt o per baix
-  if (y>=0 || y<=this.vpHeight+this.img_element.height) {
-      this.img_element.style.top = (Math.round(y)) + 'px';
-  }
-}; //End locate method
+  window.addEventListener("mousemove",
+    function(e){
+      y= (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+      self.locate(self.gap,y);
+  },
+    false);
+	//Posicionem stick a les coordenades x,y
+	this.locate = function(x,y){
+        if (y>(this.context.vpHeight-this.imgObj.height)) y=this.context.vpHeight-this.imgObj.height;
+		this.x=x;this.y=y;
+		this.imgObj.style[this.side] = (Math.round(x))+ 'px';
+		this.imgObj.style.top = (Math.round(y)) + 'px';
+	};
+}// End Stick class
 
 module.exports = Stick;
