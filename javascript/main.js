@@ -4,8 +4,9 @@
  *
  */
 
-var utils = require('./utils');
+var utils = require('./utils/utils');
 var context = require('./context');
+var Observer = require("./utils/Observer.js");
 
 //Once page has been completely loaded. Including images. We start the game
 window.onload=function(){
